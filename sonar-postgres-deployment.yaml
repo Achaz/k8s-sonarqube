@@ -1,14 +1,17 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sonar-postgres
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: sonar-postgres
   template:
     metadata:
       name: sonar-postgres
       labels:
-        name: sonar-postgres
+        app: sonar-postgres
     spec:
       containers:
         - image: postgres:latest
@@ -28,7 +31,15 @@ spec:
             # This name must match the volumes.name below.
             - name: data-disk
               mountPath: /var/lib/postgresql/data
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
       volumes:
         - name: data-disk
           persistentVolumeClaim:
             claimName: claim-postgres
+

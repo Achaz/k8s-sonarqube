@@ -1,14 +1,17 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sonarqube
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
   template:
     metadata:
       name: sonarqube
       labels:
-        name: sonarqube
+        app: sonarqube
     spec:
       containers:
         - image: sonarqube:latest
@@ -23,6 +26,13 @@ spec:
                   key: password
             - name: SONARQUBE_JDBC_URL
               value: jdbc:postgresql://sonar-postgres:5432/sonar
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
           ports:
             - containerPort: 9000
               name: sonarqube

@@ -5,10 +5,10 @@ metadata:
     name: sonar
   name: sonar
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-    - port: 80
+    - port: 9000
       targetPort: 9000
       name: sonarport
   selector:
-    name: sonarqube
+    app: sonarqube
